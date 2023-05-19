@@ -23,7 +23,8 @@ group by manager_id;
 
 select manager_id, min(salary)
 from employees
-group by manager_id having min(salary) >= 6000 and manager_id is not null
+where manager_id is not null
+group by manager_id having min(salary) >= 6000
 order by min(salary) desc;
 
 select manager_id, round(avg(salary), 2) as avg
