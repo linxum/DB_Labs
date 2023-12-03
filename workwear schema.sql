@@ -5,14 +5,6 @@ COMMENT ON SCHEMA workwear_schema IS 'Схема данных для спецо�
 
 SET search_path TO workwear_schema, public;
 
-DROP TABLE IF EXISTS movie CASCADE;
-DROP TABLE IF EXISTS box_office CASCADE;
-DROP TABLE IF EXISTS cinema_hall CASCADE;
-DROP TABLE IF EXISTS session CASCADE;
-DROP TABLE IF EXISTS tickets CASCADE;
-DROP TABLE IF EXISTS employees CASCADE;
-DROP TABLE IF EXISTS directors CASCADE;
-
 DROP TABLE IF EXISTS Workwear CASCADE;
 DROP TABLE IF EXISTS Workshops CASCADE;
 DROP TABLE IF EXISTS Workers CASCADE;
@@ -112,16 +104,10 @@ COMMENT ON COLUMN Workwear_Type.workwear_type_id IS 'Идентификатор 
 COMMENT ON COLUMN Workwear_Type.workwear_type IS 'Тип спецодежды';
 
 
-ALTER TABLE Workwear 
-	ADD CONSTRAINT Workwear_fk_workwear_type FOREIGN KEY (workwear_type_id) 
-	REFERENCES Workwear_Type(workwear_type_id)
-	ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
 ALTER TABLE Workshops 
 	ADD CONSTRAINT Workshops_fk_workers FOREIGN KEY (workshop_boss_id) 
 	REFERENCES Workers(worker_id)
-	DEFERRABLE INITIALY DEFERRED
+	DEFERRABLE INITIALLY DEFERRED
 	ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE Workers 
@@ -131,7 +117,7 @@ ALTER TABLE Workers
 ALTER TABLE Workers 
 	ADD CONSTRAINT Workers_fk_workshops FOREIGN KEY (workshop_id) 
 	REFERENCES Workshops(workshop_id)
-	DEFERRABLE INITIALY DEFERRED
+	DEFERRABLE INITIALLY DEFERRED
 	ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE Obtaining 
@@ -175,13 +161,6 @@ INSERT INTO Workers VALUES (8, 'Айбайльдульчевов Ибрагим 
 INSERT INTO Workers VALUES (9, 'Яшин Ян Янович', 4, 0.4, 6);
 INSERT INTO Workers VALUES (10, 'Простинин Азамат Алмазович', 2, 0.3, 2);
 
-INSERT INTO Workshops VALUES (1, 'Столярный цех', 1);
-INSERT INTO Workshops VALUES (2, 'Красильный цех', 2);
-INSERT INTO Workshops VALUES (3, 'Сборочный цех', 3);
-INSERT INTO Workshops VALUES (4, 'Обивочный цех', 4);
-INSERT INTO Workshops VALUES (5, 'ГБЖ цех', 5);
-INSERT INTO Workshops VALUES (6, 'Ремонтный цех', 6);
-
 INSERT INTO Obtaining VALUES (1, 1, 2, 2, '2023-01-01', '2023-12-31', 'ШСЕ');
 INSERT INTO Obtaining VALUES (2, 1, 3, 1, '2022-05-26', '2024-01-01', 'НПЭ');
 INSERT INTO Obtaining VALUES (3, 2, 4, 2, '2022-06-17', '2025-06-17', 'МЛА');
@@ -191,6 +170,10 @@ INSERT INTO Obtaining VALUES (6, 4, 8, 2, '2022-01-30', '2030-01-01', 'АИМ');
 INSERT INTO Obtaining VALUES (7, 4, 9, 1, '2022-02-22', '2030-01-01', 'ЯЯЯ');
 INSERT INTO Obtaining VALUES (8, 4, 10, 1, '2022-03-02', '2030-01-02', 'ПАА');
 
-
-
+INSERT INTO Workshops VALUES (1, 'Столярный цех', 1);
+INSERT INTO Workshops VALUES (2, 'Красильный цех', 2);
+INSERT INTO Workshops VALUES (3, 'Сборочный цех', 3);
+INSERT INTO Workshops VALUES (4, 'Обивочный цех', 4);
+INSERT INTO Workshops VALUES (5, 'ГБЖ цех', 5);
+INSERT INTO Workshops VALUES (6, 'Ремонтный цех', 6);
 
