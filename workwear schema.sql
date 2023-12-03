@@ -1,9 +1,17 @@
 DROP SCHEMA IF EXISTS workwear_schema CASCADE;
 
-CREATE SCHEMA IF NOT EXISTS workwear_schema AUTHORIZATION briantsev_va;
+CREATE SCHEMA IF NOT EXISTS workwear_schema AUTHORIZATION smkhnv;
 COMMENT ON SCHEMA workwear_schema IS 'Схема данных для спецодежды на отдельно взятом заводе';
 
 SET search_path TO workwear_schema, public;
+
+DROP TABLE IF EXISTS movie CASCADE;
+DROP TABLE IF EXISTS box_office CASCADE;
+DROP TABLE IF EXISTS cinema_hall CASCADE;
+DROP TABLE IF EXISTS session CASCADE;
+DROP TABLE IF EXISTS tickets CASCADE;
+DROP TABLE IF EXISTS employees CASCADE;
+DROP TABLE IF EXISTS directors CASCADE;
 
 DROP TABLE IF EXISTS Workwear CASCADE;
 DROP TABLE IF EXISTS Workshops CASCADE;
@@ -133,6 +141,11 @@ ALTER TABLE Obtaining
 	REFERENCES Workers(worker_id)
 	ON UPDATE CASCADE ON DELETE RESTRICT;
 
+INSERT INTO Workwear_Type VALUES (1, 'Халат рабочий');
+INSERT INTO Workwear_Type VALUES (2, 'Ботинки противоударные');
+INSERT INTO Workwear_Type VALUES (3, 'Каска противоударная');
+INSERT INTO Workwear_Type VALUES (4, 'Жилет светоотражающий');
+INSERT INTO Workwear_Type VALUES (5, 'Перчатки армированные');
 
 INSERT INTO Workwear VALUES (1, 1, 100);
 INSERT INTO Workwear VALUES (2, 1, 100);
@@ -143,14 +156,11 @@ INSERT INTO Workwear VALUES (6, 4, 300);
 INSERT INTO Workwear VALUES (7, 4, 300);
 INSERT INTO Workwear VALUES (8, 4, 350);
 
-
-INSERT INTO Workshops VALUES (1, 'Столярный цех', 1);
-INSERT INTO Workshops VALUES (2, 'Красильный цех', 2);
-INSERT INTO Workshops VALUES (3, 'Сборочный цех', 3);
-INSERT INTO Workshops VALUES (4, 'Обивочный цех', 4);
-INSERT INTO Workshops VALUES (5, 'ГБЖ цех', 5);
-INSERT INTO Workshops VALUES (6, 'Ремонтный цех', 6);
-
+INSERT INTO Positions VALUES (1, 'Начальник цеха');
+INSERT INTO Positions VALUES (2, 'Кабанчик');
+INSERT INTO Positions VALUES (3, 'Заместитель начальника цеха');
+INSERT INTO Positions VALUES (4, 'Старший мастер');
+INSERT INTO Positions VALUES (5, 'Младший мастер');
 
 INSERT INTO Workers VALUES (1, 'Алексеева Виктория Александровна', 1, 0.1, 1);
 INSERT INTO Workers VALUES (2, 'Шумейко Святослав Евгеньевич', 1, 0.5, 2);
@@ -163,6 +173,12 @@ INSERT INTO Workers VALUES (8, 'Айбайльдульчевов Ибрагим 
 INSERT INTO Workers VALUES (9, 'Яшин Ян Янович', 4, 0.4, 6);
 INSERT INTO Workers VALUES (10, 'Простинин Азамат Алмазович', 2, 0.3, 2);
 
+INSERT INTO Workshops VALUES (1, 'Столярный цех', 1);
+INSERT INTO Workshops VALUES (2, 'Красильный цех', 2);
+INSERT INTO Workshops VALUES (3, 'Сборочный цех', 3);
+INSERT INTO Workshops VALUES (4, 'Обивочный цех', 4);
+INSERT INTO Workshops VALUES (5, 'ГБЖ цех', 5);
+INSERT INTO Workshops VALUES (6, 'Ремонтный цех', 6);
 
 INSERT INTO Obtaining VALUES (1, 1, 2, 2, '2023-01-01', '2023-12-31');
 INSERT INTO Obtaining VALUES (2, 1, 3, 1, '2022-05-26', '2024-01-01');
@@ -174,15 +190,6 @@ INSERT INTO Obtaining VALUES (7, 4, 9, 1, '2022-02-22', '2030-01-01');
 INSERT INTO Obtaining VALUES (8, 4, 10, 1, '2022-03-02', '2030-01-02');
 
 
-INSERT INTO Positions VALUES (1, 'Начальник цеха');
-INSERT INTO Positions VALUES (2, 'Кабанчик');
-INSERT INTO Positions VALUES (3, 'Заместитель начальника цеха');
-INSERT INTO Positions VALUES (4, 'Старший мастер');
-INSERT INTO Positions VALUES (5, 'Младший мастер');
 
 
-INSERT INTO Workwear_Type VALUES (1, 'Халат рабочий');
-INSERT INTO Workwear_Type VALUES (2, 'Ботинки противоударные');
-INSERT INTO Workwear_Type VALUES (3, 'Каска противоударная');
-INSERT INTO Workwear_Type VALUES (4, 'Жилет светоотражающий');
-INSERT INTO Workwear_Type VALUES (5, 'Перчатки армированные');
+
