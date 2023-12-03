@@ -180,14 +180,14 @@ INSERT INTO Workshops VALUES (4, 'Обивочный цех', 4);
 INSERT INTO Workshops VALUES (5, 'ГБЖ цех', 5);
 INSERT INTO Workshops VALUES (6, 'Ремонтный цех', 6);
 
-INSERT INTO Obtaining VALUES (1, 1, 2, 2, '2023-01-01', '2023-12-31');
-INSERT INTO Obtaining VALUES (2, 1, 3, 1, '2022-05-26', '2024-01-01');
-INSERT INTO Obtaining VALUES (3, 2, 4, 2, '2022-06-17', '2025-06-17');
-INSERT INTO Obtaining VALUES (4, 2, 5, 3, '2020-11-11', '2024-11-11');
-INSERT INTO Obtaining VALUES (5, 3, 6, 1, '2023-06-01', '2026-06-01');
-INSERT INTO Obtaining VALUES (6, 4, 8, 2, '2022-01-30', '2030-01-01');
-INSERT INTO Obtaining VALUES (7, 4, 9, 1, '2022-02-22', '2030-01-01');
-INSERT INTO Obtaining VALUES (8, 4, 10, 1, '2022-03-02', '2030-01-02');
+INSERT INTO Obtaining VALUES (1, 1, 2, 2, '2023-01-01', '2023-12-31', 'ШСЕ');
+INSERT INTO Obtaining VALUES (2, 1, 3, 1, '2022-05-26', '2024-01-01', 'НПЭ');
+INSERT INTO Obtaining VALUES (3, 2, 4, 2, '2022-06-17', '2025-06-17', 'МЛА');
+INSERT INTO Obtaining VALUES (4, 2, 5, 3, '2020-11-11', '2024-11-11', 'СИЮ');
+INSERT INTO Obtaining VALUES (5, 3, 6, 1, '2023-06-01', '2026-06-01', 'БВА');
+INSERT INTO Obtaining VALUES (6, 4, 8, 2, '2022-01-30', '2030-01-01', 'АИМ');
+INSERT INTO Obtaining VALUES (7, 4, 9, 1, '2022-02-22', '2030-01-01', 'ЯЯЯ');
+INSERT INTO Obtaining VALUES (8, 4, 10, 1, '2022-03-02', '2030-01-02', 'ПАА');
 
 
 
