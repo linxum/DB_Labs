@@ -121,6 +121,7 @@ ALTER TABLE Workwear
 ALTER TABLE Workshops 
 	ADD CONSTRAINT Workshops_fk_workers FOREIGN KEY (workshop_boss_id) 
 	REFERENCES Workers(worker_id)
+	DEFERRABLE INITIALY DEFERRED
 	ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE Workers 
@@ -130,6 +131,7 @@ ALTER TABLE Workers
 ALTER TABLE Workers 
 	ADD CONSTRAINT Workers_fk_workshops FOREIGN KEY (workshop_id) 
 	REFERENCES Workshops(workshop_id)
+	DEFERRABLE INITIALY DEFERRED
 	ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE Obtaining 
@@ -188,7 +190,6 @@ INSERT INTO Obtaining VALUES (5, 3, 6, 1, '2023-06-01', '2026-06-01', 'БВА');
 INSERT INTO Obtaining VALUES (6, 4, 8, 2, '2022-01-30', '2030-01-01', 'АИМ');
 INSERT INTO Obtaining VALUES (7, 4, 9, 1, '2022-02-22', '2030-01-01', 'ЯЯЯ');
 INSERT INTO Obtaining VALUES (8, 4, 10, 1, '2022-03-02', '2030-01-02', 'ПАА');
-
 
 
 
