@@ -104,21 +104,13 @@ COMMENT ON COLUMN Workwear_Type.workwear_type_id IS 'Идентификатор 
 COMMENT ON COLUMN Workwear_Type.workwear_type IS 'Тип спецодежды';
 
 
-ALTER TABLE Workshops 
-	ADD CONSTRAINT Workshops_fk_workers FOREIGN KEY (workshop_boss_id) 
-	REFERENCES Workers(worker_id)
-	DEFERRABLE INITIALLY DEFERRED
-	ON UPDATE CASCADE ON DELETE RESTRICT;
+
 
 ALTER TABLE Workers 
 	ADD CONSTRAINT Workers_fk_positions FOREIGN KEY (worker_position_id) 
 	REFERENCES Positions(position_id)
 	ON UPDATE CASCADE ON DELETE RESTRICT;
-ALTER TABLE Workers 
-	ADD CONSTRAINT Workers_fk_workshops FOREIGN KEY (workshop_id) 
-	REFERENCES Workshops(workshop_id)
-	DEFERRABLE INITIALLY DEFERRED
-	ON UPDATE CASCADE ON DELETE RESTRICT;
+
 
 ALTER TABLE Obtaining 
 	ADD CONSTRAINT Obtaining_fk_workwear FOREIGN KEY (workwear_id) 
@@ -177,3 +169,12 @@ INSERT INTO Workshops VALUES (4, 'Обивочный цех', 4);
 INSERT INTO Workshops VALUES (5, 'ГБЖ цех', 5);
 INSERT INTO Workshops VALUES (6, 'Ремонтный цех', 6);
 
+ALTER TABLE Workshops 
+	ADD CONSTRAINT Workshops_fk_workers FOREIGN KEY (workshop_boss_id) 
+	REFERENCES Workers(worker_id)
+	ON UPDATE CASCADE ON DELETE RESTRICT;
+
+ALTER TABLE Workers 
+	ADD CONSTRAINT Workers_fk_workshops FOREIGN KEY (workshop_id) 
+	REFERENCES Workshops(workshop_id)
+	ON UPDATE CASCADE ON DELETE RESTRICT;
