@@ -231,3 +231,51 @@ JOIN
     Workwear_Type wt ON ww.workwear_type_id = wt.workwear_type_id
 GROUP BY
     w.worker_id, w.worker_name, o.obtaining_date_start;
+
+
+CREATE SEQUENCE obtaining_id_sequence
+    START WITH 10
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+DO $$ 
+DECLARE
+    v_obtaining_id INTEGER;
+    v_obtaining_date_start DATE;
+    v_obtaining_date_end DATE;
+    v_obtaining_sign VARCHAR(255);
+    v_workwear_number INTEGER;
+    v_worker_id INTEGER;
+    v_worker_name_parts CHARACTER VARYING[];
+    v_workwear_id INTEGER;
+BEGIN
+    FOR v_obtaining_id IN 1..5 LOOP
+        SELECT 
+            worker_id,
+            string_to_array(worker_name, ' ')
+        INTO 
+            v_worker_id,
+            v_worker_name_parts
+        FROM Workers
+        ORDER BY RANDOM()
+        LIMIT 1;
+
+        SELECT 
+            workwear_id
+        INTO 
+            v_workwear_id
+        FROM Workwear
+        ORDER BY RANDOM()
+        LIMIT 1;
+
+        v_workwear_number := floor(random() * 5) + 1;
+        v_obtaining_date_start := CURRENT_DATE + v_obtaining_id;
+        v_obtaining_date_end := v_obtaining_date_start + (INTERVAL '1 month' * (12 * (1 + floor(random() * 5))));
+        v_obtaining_sign := LEFT(v_worker_name_parts[1], 1) || LEFT(v_worker_name_parts[2], 1) || LEFT(v_worker_name_parts[3], 1);
+
+        INSERT INTO Obtaining (obtaining_id, workwear_id, worker_id, workwear_number, obtaining_date_start, obtaining_date_end, obtaining_sign)
+        VALUES (nextval('obtaining_id_sequence'), v_workwear_id, v_worker_id, v_workwear_number, v_obtaining_date_start, v_obtaining_date_end, v_obtaining_sign);
+    END LOOP;
+END $$;
