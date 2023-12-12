@@ -1,9 +1,11 @@
 DROP SCHEMA IF EXISTS workwear_schema CASCADE;
 
-CREATE SCHEMA IF NOT EXISTS workwear_schema AUTHORIZATION smkhnv;
+CREATE SCHEMA IF NOT EXISTS workwear_schema AUTHORIZATION briantsev_va;
 COMMENT ON SCHEMA workwear_schema IS 'Схема данных для спецодежды на отдельно взятом заводе';
 
-SET search_path TO workwear_schema, public;
+GRANT ALL ON SCHEMA workwear_schema TO briantsev_va;
+
+ALTER ROLE briantsev_va IN DATABASE briantsev_va_db SET search_path TO workwear_schema, public;
 
 DROP TABLE IF EXISTS Workwear CASCADE;
 DROP TABLE IF EXISTS Workshops CASCADE;
@@ -154,13 +156,13 @@ INSERT INTO Workers VALUES (9, 'Яшин Ян Янович', 4, 0.4, 6);
 INSERT INTO Workers VALUES (10, 'Простинин Азамат Алмазович', 2, 0.3, 2);
 
 INSERT INTO Obtaining VALUES (1, 1, 2, 2, '2023-01-01', '2023-12-31', 'ШСЕ');
-INSERT INTO Obtaining VALUES (2, 1, 3, 1, '2022-05-26', '2024-01-01', 'НПЭ');
-INSERT INTO Obtaining VALUES (3, 2, 4, 2, '2022-06-17', '2025-06-17', 'МЛА');
-INSERT INTO Obtaining VALUES (4, 2, 5, 3, '2020-11-11', '2024-11-11', 'СИЮ');
-INSERT INTO Obtaining VALUES (5, 3, 6, 1, '2023-06-01', '2026-06-01', 'БВА');
-INSERT INTO Obtaining VALUES (6, 4, 8, 2, '2022-01-30', '2030-01-01', 'АИМ');
-INSERT INTO Obtaining VALUES (7, 4, 9, 1, '2022-02-22', '2030-01-01', 'ЯЯЯ');
-INSERT INTO Obtaining VALUES (8, 4, 10, 1, '2022-03-02', '2030-01-02', 'ПАА');
+INSERT INTO Obtaining VALUES (2, 2, 3, 1, '2022-05-26', '2024-01-01', 'НПЭ');
+INSERT INTO Obtaining VALUES (3, 3, 4, 2, '2022-06-17', '2025-06-17', 'МЛА');
+INSERT INTO Obtaining VALUES (4, 4, 5, 3, '2020-11-11', '2024-11-11', 'СИЮ');
+INSERT INTO Obtaining VALUES (5, 5, 6, 1, '2023-06-01', '2026-06-01', 'БВА');
+INSERT INTO Obtaining VALUES (6, 6, 8, 2, '2022-01-30', '2030-01-01', 'АИМ');
+INSERT INTO Obtaining VALUES (7, 7, 9, 1, '2022-02-22', '2030-01-01', 'ЯЯЯ');
+INSERT INTO Obtaining VALUES (8, 8, 10, 1, '2022-03-02', '2030-01-02', 'ПАА');
 
 INSERT INTO Workshops VALUES (1, 'Столярный цех', 1);
 INSERT INTO Workshops VALUES (2, 'Красильный цех', 2);
@@ -217,7 +219,7 @@ GROUP BY
 CREATE OR REPLACE VIEW Worker_Workwear_Date_View AS
 SELECT
     w.worker_name,
-    wt.workwear_type,
+    string_agg(wt.workwear_type, ', ') AS workwear_types,
     o.obtaining_date_start
 FROM
     Workers w
@@ -226,4 +228,6 @@ JOIN
 JOIN
     Workwear ww ON o.workwear_id = ww.workwear_id
 JOIN
-    Workwear_Type wt ON ww.workwear_type_id = wt.workwear_type_id;
+    Workwear_Type wt ON ww.workwear_type_id = wt.workwear_type_id
+GROUP BY
+    w.worker_id, w.worker_name, o.obtaining_date_start;
