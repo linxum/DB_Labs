@@ -293,3 +293,37 @@ BEGIN
     END LOOP;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Создание таблицы для хранения аудита изменений
+CREATE TABLE IF NOT EXISTS Obtaining_Audit (
+    audit_id SERIAL PRIMARY KEY,
+    obtaining_id INTEGER,
+    action VARCHAR(10) NOT NULL,
+    audit_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    old_data JSONB,
+    new_data JSONB
+);
+
+CREATE OR REPLACE FUNCTION obtaining_audit()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO Obtaining_Audit (obtaining_id, action, new_data)
+        VALUES (NEW.obtaining_id, 'INSERT', ROW_TO_JSON(NEW)::JSONB);
+    ELSIF TG_OP = 'UPDATE' THEN
+        INSERT INTO Obtaining_Audit (obtaining_id, action, old_data, new_data)
+        VALUES (NEW.obtaining_id, 'UPDATE', ROW_TO_JSON(OLD)::JSONB, ROW_TO_JSON(NEW)::JSONB);
+    ELSIF TG_OP = 'DELETE' THEN
+        INSERT INTO Obtaining_Audit (obtaining_id, action, old_data)
+        VALUES (OLD.obtaining_id, 'DELETE', ROW_TO_JSON(OLD)::JSONB);
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER obtaining_audit_trigger
+AFTER INSERT OR UPDATE OR DELETE
+ON Obtaining
+FOR EACH ROW
+EXECUTE FUNCTION obtaining_audit();
+
