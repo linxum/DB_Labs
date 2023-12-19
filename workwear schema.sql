@@ -294,7 +294,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Создание таблицы для хранения аудита изменений
 CREATE TABLE IF NOT EXISTS Obtaining_Audit (
     audit_id SERIAL PRIMARY KEY,
     obtaining_id INTEGER,
@@ -327,3 +326,43 @@ ON Obtaining
 FOR EACH ROW
 EXECUTE FUNCTION obtaining_audit();
 
+REVOKE ALL PRIVILEGES ON DATABASE briantsev_va_db FROM hr_head;
+REVOKE ALL PRIVILEGES ON SCHEMA workwear_schema FROM hr_head;
+REVOKE ALL PRIVILEGES ON TABLE positions, workers, workshops FROM hr_head;
+REVOKE ALL PRIVILEGES ON DATABASE briantsev_va_db FROM hr_user;
+REVOKE ALL PRIVILEGES ON SCHEMA workwear_schema FROM hr_user;
+REVOKE ALL PRIVILEGES ON TABLE positions, workers, workshops FROM hr_user;
+DROP USER IF EXISTS hr_user;
+DROP ROLE IF EXISTS hr_head;
+
+REVOKE ALL PRIVILEGES ON DATABASE briantsev_va_db FROM warehouse_head;
+REVOKE ALL PRIVILEGES ON SCHEMA workwear_schema FROM warehouse_head;
+REVOKE ALL PRIVILEGES ON TABLE workwear_type, workwear, obtaining FROM warehouse_head;
+REVOKE ALL PRIVILEGES ON DATABASE briantsev_va_db FROM warehouse_user;
+REVOKE ALL PRIVILEGES ON SCHEMA workwear_schema FROM warehouse_user;
+REVOKE ALL PRIVILEGES ON TABLE workwear_type, workwear, obtaining FROM warehouse_user;
+DROP USER IF EXISTS warehouse_user;
+DROP ROLE IF EXISTS warehouse_head;
+
+
+CREATE ROLE hr_head WITH PASSWORD 'password_hr' LOGIN;
+GRANT CONNECT ON DATABASE briantsev_va_db TO hr_head;
+GRANT USAGE ON SCHEMA workwear_schema TO hr_head;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE positions TO hr_head;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE workers TO hr_head;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE workshops TO hr_head;
+
+CREATE ROLE warehouse_head WITH PASSWORD 'password_wh' LOGIN;
+GRANT CONNECT ON DATABASE briantsev_va_db TO warehouse_head;
+GRANT USAGE ON SCHEMA workwear_schema TO warehouse_head;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE workwear_type TO warehouse_head;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE workwear TO warehouse_head;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE obtaining TO warehouse_head;
+
+CREATE USER hr_user WITH PASSWORD 'password_hr';
+ALTER USER hr_user SET ROLE hr_head;
+GRANT CONNECT ON DATABASE briantsev_va_db TO hr_user;
+
+CREATE USER warehouse_user WITH PASSWORD 'password_wh';
+ALTER USER warehouse_user SET ROLE warehouse_head;
+GRANT CONNECT ON DATABASE briantsev_va_db TO warehouse_user;
