@@ -240,7 +240,35 @@ CREATE SEQUENCE obtaining_id_sequence
     NO MAXVALUE
     CACHE 1;
 
-DO $$ 
+CREATE OR REPLACE FUNCTION getRandomWorker() RETURNS TABLE (
+    work_id INTEGER,
+    work_name_parts TEXT[]
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        worker_id AS work_id,
+        string_to_array(worker_name, ' ') AS work_name_parts
+    FROM Workers
+    ORDER BY RANDOM()
+    LIMIT 1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION getRandomWorkwear() RETURNS TABLE (
+    wear_id INTEGER
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        workwear_id AS wear_id
+    FROM Workwear
+    ORDER BY RANDOM()
+    LIMIT 1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE generateObtainingRecords(num_records INTEGER) AS $$
 DECLARE
     v_obtaining_id INTEGER;
     v_obtaining_date_start DATE;
@@ -248,27 +276,12 @@ DECLARE
     v_obtaining_sign VARCHAR(255);
     v_workwear_number INTEGER;
     v_worker_id INTEGER;
-    v_worker_name_parts CHARACTER VARYING[];
+    v_worker_name_parts VARCHAR[];
     v_workwear_id INTEGER;
 BEGIN
-    FOR v_obtaining_id IN 1..5 LOOP
-        SELECT 
-            worker_id,
-            string_to_array(worker_name, ' ')
-        INTO 
-            v_worker_id,
-            v_worker_name_parts
-        FROM Workers
-        ORDER BY RANDOM()
-        LIMIT 1;
-
-        SELECT 
-            workwear_id
-        INTO 
-            v_workwear_id
-        FROM Workwear
-        ORDER BY RANDOM()
-        LIMIT 1;
+    FOR v_obtaining_id IN 1..num_records LOOP
+        SELECT work_id, work_name_parts INTO v_worker_id, v_worker_name_parts FROM getRandomWorker();
+        SELECT wear_id INTO v_workwear_id FROM getRandomWorkwear();
 
         v_workwear_number := floor(random() * 5) + 1;
         v_obtaining_date_start := CURRENT_DATE + v_obtaining_id;
@@ -278,4 +291,5 @@ BEGIN
         INSERT INTO Obtaining (obtaining_id, workwear_id, worker_id, workwear_number, obtaining_date_start, obtaining_date_end, obtaining_sign)
         VALUES (nextval('obtaining_id_sequence'), v_workwear_id, v_worker_id, v_workwear_number, v_obtaining_date_start, v_obtaining_date_end, v_obtaining_sign);
     END LOOP;
-END $$;
+END;
+$$ LANGUAGE plpgsql;
