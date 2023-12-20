@@ -345,14 +345,14 @@ DROP USER IF EXISTS warehouse_user;
 DROP ROLE IF EXISTS warehouse_head;
 
 
-CREATE ROLE hr_head WITH PASSWORD 'password_hr' LOGIN;
+CREATE ROLE hr_head;
 GRANT CONNECT ON DATABASE briantsev_va_db TO hr_head;
 GRANT USAGE ON SCHEMA workwear_schema TO hr_head;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE positions TO hr_head;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE workers TO hr_head;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE workshops TO hr_head;
 
-CREATE ROLE warehouse_head WITH PASSWORD 'password_wh' LOGIN;
+CREATE ROLE warehouse_head;
 GRANT CONNECT ON DATABASE briantsev_va_db TO warehouse_head;
 GRANT USAGE ON SCHEMA workwear_schema TO warehouse_head;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE workwear_type TO warehouse_head;
@@ -360,9 +360,11 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE workwear TO warehouse_head;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE obtaining TO warehouse_head;
 
 CREATE USER hr_user WITH PASSWORD 'password_hr';
-ALTER USER hr_user SET ROLE hr_head;
+GRANT hr_head TO hr_user;
 GRANT CONNECT ON DATABASE briantsev_va_db TO hr_user;
+ALTER ROLE hr_user IN DATABASE briantsev_va_db SET search_path TO workwear_schema, public;
 
 CREATE USER warehouse_user WITH PASSWORD 'password_wh';
-ALTER USER warehouse_user SET ROLE warehouse_head;
+GRANT warehouse_head TO warehouse_user;
 GRANT CONNECT ON DATABASE briantsev_va_db TO warehouse_user;
+ALTER ROLE warehouse_user IN DATABASE briantsev_va_db SET search_path TO workwear_schema, public;
